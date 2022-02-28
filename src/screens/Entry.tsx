@@ -1,7 +1,12 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
-const Entry = ({navigation}) => {
+interface Props {
+  navigation: StackNavigationProp<AuthStackParamList, 'name'>;
+}
+
+const Entry = ({navigation}: Props) => {
   const changeScreen = (name: string) => {
     navigation.navigate(name);
   };
