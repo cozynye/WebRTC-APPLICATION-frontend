@@ -1,10 +1,9 @@
 import React from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import styled from 'styled-components/native';
-import Logo from '@images/logo.png';
 
 interface Props {
-  navigation: StackNavigationProp<AuthStackParamList, 'name'>;
+  navigation: StackNavigationProp<any>;
 }
 
 const Entry = ({navigation}: Props) => {
@@ -15,7 +14,7 @@ const Entry = ({navigation}: Props) => {
   return (
     <Container>
       <ImageContainer>
-        <Image source={Logo} />
+        <Image source={require('@images/logo.png')} />
       </ImageContainer>
 
       <TouchBox>
@@ -29,12 +28,11 @@ const Entry = ({navigation}: Props) => {
     </Container>
   );
 };
-
 const Container = styled.View`
   flex: 1;
   justify-content: space-between;
   align-items: center;
-  background-color: ${props => props.theme.color.white};
+  background-color: ${({theme}) => theme.color.white};
 `;
 
 const ImageContainer = styled.View`
@@ -50,7 +48,7 @@ const TouchBox = styled.View`
 const SignUpButtonContainer = styled.TouchableOpacity`
   margin-top: 15px;
   padding: 13px 120px;
-  background-color: ${props => props.theme.color.primary};
+  background-color: ${({theme}) => theme.color.primary};
   border-radius: 8px;
   align-items: center;
 `;
@@ -58,8 +56,8 @@ const SignUpButtonContainer = styled.TouchableOpacity`
 const LoginButtonContainer = styled.TouchableOpacity`
   margin-top: 15px;
   padding: 13px 120px;
-  background-color: ${props => props.theme.color.white};
-  border: 1px solid ${props => props.theme.color.primary};
+  background-color: ${({theme}) => theme.color.white};
+  border: 1px solid ${({theme}) => theme.color.primary};
   border-radius: 8px;
   align-items: center;
 `;
