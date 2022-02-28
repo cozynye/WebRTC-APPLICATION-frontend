@@ -17,7 +17,8 @@
       "@components/*": ["components/*"],
       "@screens/*": ["screens/*"],
       "@styles/*": ["styles/*"],
-      "@query/*": ["query/*"]
+      "@query/*": ["query/*"],
+      "@images/*": ["images/*"]
     }
   },
   "exclude": [
