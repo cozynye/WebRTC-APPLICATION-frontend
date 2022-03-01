@@ -1,9 +1,12 @@
 import React from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import styled from 'styled-components/native';
+import Logo from 'assets/images/logo.png';
+import {ParamListBase} from '@react-navigation/native';
+import {View} from 'react-native';
 
 interface Props {
-  navigation: StackNavigationProp<any>;
+  navigation: StackNavigationProp<ParamListBase>;
 }
 
 const Entry = ({navigation}: Props) => {
@@ -12,40 +15,42 @@ const Entry = ({navigation}: Props) => {
   };
 
   return (
-    <Container>
-      <ImageContainer>
-        <Image source={require('@images/logo.png')} />
-      </ImageContainer>
+    <ContainerView>
+      <ImageContainerView>
+        <Image source={Logo} />
+      </ImageContainerView>
 
-      <TouchBox>
-        <SignUpButtonContainer onPress={() => changeScreen('SignUp')}>
+      <TouchContainerView>
+        <SignUpButton onPress={() => changeScreen('SignUp')}>
           <SignUpText>회원가입</SignUpText>
-        </SignUpButtonContainer>
-        <LoginButtonContainer onPress={() => changeScreen('SignIn')}>
+        </SignUpButton>
+        <LoginButton onPress={() => changeScreen('SignIn')}>
           <LoginText>로그인</LoginText>
-        </LoginButtonContainer>
-      </TouchBox>
-    </Container>
+        </LoginButton>
+      </TouchContainerView>
+    </ContainerView>
   );
 };
-const Container = styled.View`
+const ContainerView = styled.View`
   flex: 1;
   justify-content: space-between;
   align-items: center;
   background-color: ${({theme}) => theme.color.white};
 `;
 
-const ImageContainer = styled.View`
-  margin-top: 272px;
+const ImageContainerView = styled.View`
+  flex: 2;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Image = styled.Image``;
 
-const TouchBox = styled.View`
+const TouchContainerView = styled.View`
   margin-bottom: 60px;
 `;
 
-const SignUpButtonContainer = styled.TouchableOpacity`
+const SignUpButton = styled.TouchableOpacity`
   margin-top: 15px;
   padding: 13px 120px;
   background-color: ${({theme}) => theme.color.primary};
@@ -53,7 +58,7 @@ const SignUpButtonContainer = styled.TouchableOpacity`
   align-items: center;
 `;
 
-const LoginButtonContainer = styled.TouchableOpacity`
+const LoginButton = styled.TouchableOpacity`
   margin-top: 15px;
   padding: 13px 120px;
   background-color: ${({theme}) => theme.color.white};

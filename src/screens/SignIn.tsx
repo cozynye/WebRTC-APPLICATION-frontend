@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
+import {Image} from 'react-native';
 import styled from 'styled-components/native';
+import Logo from 'assets/images/logo.png';
 
 const SignIn = () => {
   const [inputState, setInputState] = useState<{
@@ -12,22 +14,22 @@ const SignIn = () => {
 
   const {email, password} = inputState;
   return (
-    <Container>
-      <ImageContainer>
-        <Image source={require('@images/logo.png')} />
-      </ImageContainer>
-      <InfomationContainer>
-        <InputContainer>
-          <LabelBox>이메일</LabelBox>
-          <InputBox
+    <ContainerView>
+      <ImageContainerView>
+        <Image source={Logo} />
+      </ImageContainerView>
+      <InfomationContainerView>
+        <InputContainerView>
+          <LabelText>이메일</LabelText>
+          <InputTextInput
             placeholder="이메일을 입력해주세요"
             value={email}
             onChangeText={text => setInputState({...inputState, email: text})}
           />
-        </InputContainer>
-        <InputContainer>
-          <LabelBox>비밀번호</LabelBox>
-          <InputBox
+        </InputContainerView>
+        <InputContainerView>
+          <LabelText>비밀번호</LabelText>
+          <InputTextInput
             placeholder="비밀번호를 입력해주세요"
             value={password}
             onChangeText={text =>
@@ -35,40 +37,38 @@ const SignIn = () => {
             }
             secureTextEntry={true}
           />
-        </InputContainer>
-      </InfomationContainer>
-      <TouchContainer>
-        <TextContainer>로그인</TextContainer>
-      </TouchContainer>
-    </Container>
+        </InputContainerView>
+      </InfomationContainerView>
+      <LoginButton>
+        <LoginText>로그인</LoginText>
+      </LoginButton>
+    </ContainerView>
   );
 };
 
-const Container = styled.View`
+const ContainerView = styled.View`
   flex: 1;
   align-items: center;
   justify-content: space-between;
   background-color: ${({theme}) => theme.color.white};
 `;
 
-const ImageContainer = styled.View`
+const ImageContainerView = styled.View`
   margin-top: 100px;
   flex: 1;
 `;
 
-const Image = styled.Image``;
-
-const InfomationContainer = styled.View`
+const InfomationContainerView = styled.View`
   flex: 2;
 `;
 
-const InputContainer = styled.View`
+const InputContainerView = styled.View`
   margin-top: 20px;
 `;
-const LabelBox = styled.Text`
+const LabelText = styled.Text`
   font-size: 12px;
 `;
-const InputBox = styled.TextInput`
+const InputTextInput = styled.TextInput`
   width: 300px;
   margin-top: 7px;
   padding: 15px;
@@ -77,7 +77,7 @@ const InputBox = styled.TextInput`
   border-radius: 8px;
 `;
 
-const TouchContainer = styled.TouchableOpacity`
+const LoginButton = styled.TouchableOpacity`
   margin-bottom: 60px;
   padding: 13px 120px;
   background-color: ${({theme}) => theme.color.primary};
@@ -85,9 +85,10 @@ const TouchContainer = styled.TouchableOpacity`
   align-items: center;
 `;
 
-const TextContainer = styled.Text`
+const LoginText = styled.Text`
   font-size: 18px;
   font-weight: bold;
   color: ${({theme}) => theme.color.white};
 `;
+
 export default SignIn;
