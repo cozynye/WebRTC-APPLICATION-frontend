@@ -13,6 +13,8 @@ interface Props {
   navigation: StackNavigationProp<ParamListBase>;
 }
 
+const LOGIN_API = 'http://44.203.41.15:8000/users/signin';
+
 const SignIn = ({navigation}: Props) => {
   const [inputState, setInputState] = useState<{
     email: string;
@@ -30,8 +32,9 @@ const SignIn = ({navigation}: Props) => {
   };
 
   const login = async () => {
+    navigation.navigate('Main');
     try {
-      await fetch('http://44.203.41.15:8000/users/signin', {
+      await fetch(LOGIN_API, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -46,7 +49,6 @@ const SignIn = ({navigation}: Props) => {
         .then(data => {
           if (data.result === 'True') {
             dispatch(userLogin(data.token));
-            navigation.navigate('Main');
           } else if (data.result === 'False') {
             Alert.alert(data.message);
           } else {

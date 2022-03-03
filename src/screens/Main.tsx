@@ -15,10 +15,10 @@ const Main = ({navigation}: Props) => {
   const auth = useSelector(state => state.auth);
 
   useEffect(() => {
-    if (!auth.token) {
-      navigation.navigate('Entry');
-    }
-  }, [auth.token, navigation]);
+    // if (!auth.token) {
+    //   navigation.navigate('Entry');
+    // }
+  }, [auth.token]);
   return (
     <ContainerView>
       <TextView>
@@ -47,7 +47,8 @@ const ContainerView = styled.View`
 
 const TextView = styled.View`
   align-self: flex-start;
-  right: -30px;
+  padding-top: 20px;
+  padding-left: 30px;
 `;
 
 const FirstLineText = styled.Text`
