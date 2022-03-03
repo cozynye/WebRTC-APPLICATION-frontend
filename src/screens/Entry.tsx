@@ -1,9 +1,9 @@
 import React from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {ParamListBase} from '@react-navigation/native';
 import styled from 'styled-components/native';
 import Logo from 'assets/images/logo.png';
-import {ParamListBase} from '@react-navigation/native';
-import {View} from 'react-native';
+import {Image, StatusBar} from 'react-native';
 
 interface Props {
   navigation: StackNavigationProp<ParamListBase>;
@@ -43,8 +43,6 @@ const ImageContainerView = styled.View`
   align-items: center;
   justify-content: center;
 `;
-
-const Image = styled.Image``;
 
 const TouchContainerView = styled.View`
   margin-bottom: 60px;
