@@ -84,7 +84,7 @@ const SignIn = ({navigation}: Props) => {
               onChangeText={text =>
                 setInputState({...inputState, password: text})
               }
-              secureTextEntry={isPasswordType ? true : false}
+              secureTextEntry={isPasswordType}
             />
             <IconButton onPress={changePasswordType} activeOpacity={0.9}>
               {/* <Icon name={isPasswordType ? 'eye-off' : 'eye'} size={20} /> */}

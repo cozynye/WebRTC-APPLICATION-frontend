@@ -15,7 +15,7 @@ const Main = ({navigation}: Props) => {
   const auth = useSelector(state => state.auth);
 
   useEffect(() => {
-    if (auth.token === undefined || auth.token === null) {
+    if (!auth.token) {
       navigation.navigate('Entry');
     }
   }, [auth.token, navigation]);
