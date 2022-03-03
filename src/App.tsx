@@ -26,7 +26,11 @@ const App: FC = () => {
               component={Entry}
               options={{headerShown: false}}
             />
-            <Stack.Screen name="SignUp" component={SignUp} />
+            <Stack.Screen
+              name="SignUp"
+              component={SignUp}
+              options={{title: '회원가입', headerShown: false}}
+            />
             <Stack.Screen
               name="SignIn"
               component={SignIn}
@@ -43,4 +47,5 @@ const App: FC = () => {
     </Provider>
   );
 };
+
 export default App;

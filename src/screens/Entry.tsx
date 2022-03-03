@@ -20,14 +20,14 @@ const Entry = ({navigation}: Props) => {
         <Image source={Logo} />
       </ImageContainerView>
 
-      <TouchContainerView>
+      <EntryView>
         <SignUpButton onPress={() => changeScreen('SignUp')}>
           <SignUpText>회원가입</SignUpText>
         </SignUpButton>
         <LoginButton onPress={() => changeScreen('SignIn')}>
           <LoginText>로그인</LoginText>
         </LoginButton>
-      </TouchContainerView>
+      </EntryView>
     </ContainerView>
   );
 };
@@ -75,6 +75,12 @@ const LoginText = styled.Text`
   font-size: 18px;
   font-weight: bold;
   color: ${props => props.theme.color.primary};
+`;
+
+const EntryView = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default Entry;
