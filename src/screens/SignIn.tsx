@@ -23,18 +23,23 @@ const SignIn = ({navigation}: Props) => {
     email: '',
     password: '',
   });
-  const dispatch = useDispatch();
 
+  const {email, password} = inputState;
   const [isPasswordType, setIsPasswordType] = useState(true);
+
+  const dispatch = useDispatch();
 
   const changePasswordType = () => {
     setIsPasswordType(prev => !prev);
   };
 
   const login = async () => {
-    navigation.navigate('Main');
+    if (!inputState.email || !inputState.password) {
+      Alert.alert('이메일 또는 비밀번호를 입력하세요.');
+      return;
+    }
     try {
-      await fetch(LOGIN_API, {
+      const response = await fetch(LOGIN_API, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -44,24 +49,28 @@ const SignIn = ({navigation}: Props) => {
           email: inputState.email,
           password: inputState.password,
         }),
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.result === 'True') {
-            dispatch(userLogin(data.token));
-          } else if (data.result === 'False') {
-            Alert.alert(data.message);
-          } else {
-            throw new Error(data.message);
-          }
-        });
-    } catch (err) {
-      console.log(err);
-      // 에러시 활용 법
+      });
+      const json = await response.json();
+      if (response.status === 200) {
+        dispatch(userLogin(json.token));
+        navigation.navigate('Main');
+      } else if (response.status === 400) {
+        if (json.email) {
+          throw new Error(json.email);
+        } else if (json.non_field_errors) {
+          console.log('durl');
+          throw new Error(json.non_field_errors);
+        }
+      } else {
+        throw new Error(json);
+      }
+    } catch (err: any) {
+      if (err.message) {
+        Alert.alert(err.message);
+      }
     }
   };
 
-  const {email, password} = inputState;
   return (
     <ContainerView>
       <ImageContainerView>
