@@ -16,6 +16,8 @@ interface Props {
 const LOGIN_API = 'http://44.203.41.15:8000/users/signin';
 
 const SignIn = ({navigation}: Props) => {
+  console.log('asdf');
+
   const [inputState, setInputState] = useState<{
     email: string;
     password: string;
@@ -57,9 +59,8 @@ const SignIn = ({navigation}: Props) => {
       } else if (response.status === 400) {
         if (json.email) {
           throw new Error(json.email);
-        } else if (json.non_field_errors) {
-          console.log('durl');
-          throw new Error(json.non_field_errors);
+        } else if (json.message) {
+          throw new Error(json.message);
         }
       } else {
         throw new Error(json);
@@ -98,7 +99,6 @@ const SignIn = ({navigation}: Props) => {
               secureTextEntry={isPasswordType}
             />
             <IconButton onPress={changePasswordType} activeOpacity={0.9}>
-              {/* <Icon name={isPasswordType ? 'eye-off' : 'eye'} size={20} /> */}
               <Image source={isPasswordType ? EyeOff : Eye} />
             </IconButton>
           </PassWordView>

@@ -3,7 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {ParamListBase} from '@react-navigation/native';
 import styled from 'styled-components/native';
 import Logo from 'assets/images/logo.png';
-import {Image, StatusBar} from 'react-native';
+import {Image} from 'react-native';
 
 interface Props {
   navigation: StackNavigationProp<ParamListBase>;
@@ -58,7 +58,7 @@ const SignUpButton = styled.TouchableOpacity`
 
 const LoginButton = styled.TouchableOpacity`
   margin-top: 15px;
-  padding: 13px 120px;
+  padding: 13px 126px;
   background-color: ${({theme}) => theme.color.white};
   border: 1px solid ${({theme}) => theme.color.primary};
   border-radius: 8px;
