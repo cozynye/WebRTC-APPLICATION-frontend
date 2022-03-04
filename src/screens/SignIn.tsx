@@ -8,16 +8,13 @@ import {userLogin} from '~/module/auth';
 import Logo from 'assets/images/logo.png';
 import EyeOff from 'assets/images/icon_feather_eye_off.png';
 import Eye from 'assets/images/icon_feather_eye_on.png';
+import {fetchAPI} from '~/config';
 
 interface Props {
   navigation: StackNavigationProp<ParamListBase>;
 }
 
-const LOGIN_API = 'http://44.203.41.15:8000/users/signin';
-
 const SignIn = ({navigation}: Props) => {
-  console.log('asdf');
-
   const [inputState, setInputState] = useState<{
     email: string;
     password: string;
@@ -25,11 +22,13 @@ const SignIn = ({navigation}: Props) => {
     email: '',
     password: '',
   });
-
   const {email, password} = inputState;
   const [isPasswordType, setIsPasswordType] = useState(true);
 
   const dispatch = useDispatch();
+
+  console.log('dispatch');
+  console.log(dispatch);
 
   const changePasswordType = () => {
     setIsPasswordType(prev => !prev);
@@ -41,15 +40,15 @@ const SignIn = ({navigation}: Props) => {
       return;
     }
     try {
-      const response = await fetch(LOGIN_API, {
+      const response = await fetch(fetchAPI.fetchLogin, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: inputState.email,
-          password: inputState.password,
+          email,
+          password,
         }),
       });
       const json = await response.json();
@@ -65,13 +64,14 @@ const SignIn = ({navigation}: Props) => {
       } else {
         throw new Error(json);
       }
-    } catch (err: any) {
-      if (err.message) {
+    } catch (err) {
+      if (err instanceof Error) {
         Alert.alert(err.message);
+      } else {
+        Alert.alert(String(err));
       }
     }
   };
-
   return (
     <ContainerView>
       <ImageContainerView>

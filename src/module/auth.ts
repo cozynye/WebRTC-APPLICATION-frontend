@@ -7,7 +7,7 @@ export function userLogin(data: string) {
   };
 }
 
-type Type = ReturnType<typeof userLogin>;
+type userLoginActionType = ReturnType<typeof userLogin>;
 
 const initialState: {
   token: string | null;
@@ -17,7 +17,7 @@ const initialState: {
 
 export default function auth(
   state = initialState,
-  action: {type: string; payload: Type},
+  action: {type: string; payload: userLoginActionType},
 ) {
   switch (action.type) {
     case SET_TOEKN:
