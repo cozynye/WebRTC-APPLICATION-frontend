@@ -10,7 +10,6 @@ import theme from './styles/theme';
 import {createStore} from 'redux';
 import rootReducer from './module/index';
 import {Provider} from 'react-redux';
-
 const store = createStore(rootReducer);
 
 const Stack = createNativeStackNavigator();

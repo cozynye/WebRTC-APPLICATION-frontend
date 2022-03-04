@@ -1,31 +1,29 @@
-import React from 'react';
-import {
-  Text,
-  View,
-  TextInput,
-  SafeAreaView,
-  Button,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Alert, View} from 'react-native';
 import styled from 'styled-components/native';
+import {useDispatch} from 'react-redux';
 import {StackNavigationProp} from '@react-navigation/stack';
-import SignUpTextInput from '@components/SignUpTextInput';
-import SignUpPwTextInput from '@components/SignUpPwTextInput';
+import {ParamListBase} from '@react-navigation/native';
+import {userLogin} from '~/module/auth';
 import LeftButton from '@images/icon_feather_arrow_left.png';
-import {PrivateValueStore} from '@react-navigation/native';
 import showPwImage from '@images/icon_feather_eye_off.png';
 import hidePwImage from '@images/icon_feather_eye_on.png';
+import {fetchApi} from '~/config';
 
 interface Props {
-  navigation: StackNavigationProp<AuthStackParamList, 'name'>;
+  navigation: StackNavigationProp<ParamListBase>;
 }
 
 const SignUp = ({navigation}: Props) => {
-  const changeScreen = (name: string) => {
-    navigation.navigate(name);
+  const changeScreen = (navigateName: string) => {
+    navigation.navigate(navigateName);
   };
-  const [textInputs, setTextInputs] = React.useState({
+
+  const dispatch = useDispatch();
+  // const textInputs = useSelector(store => store.signUp);
+  // console.log(textInputs);
+
+  const [textInputs, setTextInputs] = useState({
     surname: '',
     name: '',
     email: '',
@@ -33,17 +31,128 @@ const SignUp = ({navigation}: Props) => {
     passwordVerify: '',
   });
 
-  const handleInputChange = (name: string, value: string) => {
-    setTextInputs({...textInputs, [name]: value});
-  };
+  const {surname, name, email, password, passwordVerify} = textInputs;
 
-  const [showPw, setShowPw] = React.useState({
+  const [showPw, setShowPw] = useState({
     pw: true,
     pwVerify: true,
   });
 
-  const handlePwShow = (name: string, value: boolean) => {
-    setShowPw({...showPw, [name]: !value});
+  const [emailWarningText, setEmailWarningText] = useState(true);
+
+  const [warnings, setWarnings] = useState({
+    isEmailExisting: false,
+    isPwValid: false,
+    isPwMatching: false,
+  });
+
+  const [submitDisabled, setSubmitDisabled] = useState(true);
+
+  const handleInputChange = (name: string, value: string) => {
+    setTextInputs({...textInputs, [name]: value});
+  };
+
+  const handlePwShow = (pwname: string, boolean: boolean) => {
+    setShowPw(prev => {
+      return {...prev, [pwname]: !boolean};
+    });
+  };
+
+  const handleWarnings = (warningname: string, setboolean: boolean) => {
+    setWarnings(prev => {
+      return {...prev, [warningname]: setboolean};
+    });
+  };
+
+  useEffect(() => {
+    const isPwVerified = () => {
+      return new RegExp('^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z@$!%*?&\\d]{8,}$').test(
+        password,
+      );
+    };
+
+    if (isPwVerified()) {
+      handleWarnings('isPwValid', false);
+    } else {
+      if (password.length === 0) {
+        handleWarnings('isPwValid', false);
+      } else {
+        handleWarnings('isPwValid', true);
+      }
+    }
+
+    if (password === passwordVerify) {
+      handleWarnings('isPwMatching', false);
+    } else {
+      if (passwordVerify.length === 0) {
+        handleWarnings('isPwMatching', false);
+      } else {
+        handleWarnings('isPwMatching', true);
+      }
+    }
+
+    if (
+      surname &&
+      name &&
+      email &&
+      isPwVerified() &&
+      password === passwordVerify
+    ) {
+      setSubmitDisabled(false);
+    } else {
+      setSubmitDisabled(true);
+    }
+  }, [email, password, passwordVerify, name, surname]);
+
+  //백엔드로 데이터 보내고, 회원가입 성공했을 시 자동로그인 해주는 부분
+  const submitSignUpData = () => {
+    if (!submitDisabled) {
+      fetch(fetchApi.signUp, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: textInputs.email,
+          first_name: textInputs.name,
+          last_name: textInputs.surname,
+          password: textInputs.password,
+        }),
+      })
+        .then(res => res.json())
+        .then(res => {
+          if (res.email[0] === '유효한 이메일 주소를 입력하십시오.') {
+            setEmailWarningText(false);
+            handleWarnings('isEmailExisting', true);
+          } else if (res.email[0] === 'user의 email은/는 이미 존재합니다.') {
+            setEmailWarningText(true);
+            handleWarnings('isEmailExisting', true);
+          } else {
+            handleWarnings('isEmailExisting', false);
+          }
+          if (res.email === email) {
+            fetch(fetchApi.signin, {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email,
+                password,
+              }),
+            })
+              .then(response => response.json())
+              .then(response => {
+                dispatch(userLogin(response.token));
+                changeScreen('Main');
+              })
+              .catch(error => alert(error));
+          }
+        })
+        .catch(err => alert(err));
+    }
   };
 
   return (
@@ -64,7 +173,7 @@ const SignUp = ({navigation}: Props) => {
                   onChangeText={(text: string) =>
                     handleInputChange('surname', text)
                   }
-                  value={textInputs.surname}
+                  value={surname}
                   placeholder="성을 입력해주세요"
                 />
               </View>
@@ -76,30 +185,42 @@ const SignUp = ({navigation}: Props) => {
                   onChangeText={(text: string) =>
                     handleInputChange('name', text)
                   }
-                  value={textInputs.name}
+                  value={name}
                   placeholder="이름을 입력해주세요"
                 />
               </View>
             </NameView>
           </TwoInputs>
+
           <View>
             <SignUpLabel>이메일</SignUpLabel>
             <SignupTextInput
               onChangeText={(text: string) => handleInputChange('email', text)}
-              value={textInputs.email}
+              value={email}
               placeholder="이메일을 입력해주세요"
+              autoCapitalize="none"
             />
           </View>
+
+          {warnings.isEmailExisting && (
+            <WarningText>
+              {emailWarningText
+                ? '이미 등록된 이메일 주소입니다'
+                : '유효한 이메일 주소를 입력해 주세요'}
+            </WarningText>
+          )}
+
           <View>
             <SignUpLabel>비밀번호</SignUpLabel>
             <PwInputView>
               <SignupPwTextInput
-                secureTextEntry={showPw.pw ? true : false}
+                secureTextEntry={showPw.pw}
                 onChangeText={(text: string) =>
                   handleInputChange('password', text)
                 }
-                value={textInputs.password}
+                value={password}
                 placeholder="비밀번호를 입력해주세요"
+                autoCapitalize="none"
               />
               <ShowPwButton onPress={() => handlePwShow('pw', showPw.pw)}>
                 <ShowPwImage
@@ -109,11 +230,19 @@ const SignUp = ({navigation}: Props) => {
               </ShowPwButton>
             </PwInputView>
           </View>
+
+          {warnings.isPwValid && (
+            <WarningText>
+              숫자와 영문자 조합 8자리 이상을 입력해 주세요.
+            </WarningText>
+          )}
+
           <View>
             <SignUpLabel>비밀번호 확인</SignUpLabel>
             <PwInputView>
               <SignupPwTextInput
-                secureTextEntry={showPw.pw ? true : false}
+                autoCapitalize="none"
+                secureTextEntry={showPw.pwVerify}
                 onChangeText={(text: string) =>
                   handleInputChange('passwordVerify', text)
                 }
@@ -129,9 +258,17 @@ const SignUp = ({navigation}: Props) => {
               </ShowPwButton>
             </PwInputView>
           </View>
+
+          {warnings.isPwMatching && (
+            <WarningText>비밀번호가 일치하지 않습니다.</WarningText>
+          )}
         </SignUpInputs>
       </View>
-      <SignUpButton>
+      <SignUpButton
+        disabled={submitDisabled}
+        onPress={() => {
+          submitSignUpData();
+        }}>
         <SignUpButtonText>가입 완료</SignUpButtonText>
       </SignUpButton>
     </SignUpView>
@@ -162,6 +299,13 @@ const GoBackImage = styled.Image`
   height: 100%;
 `;
 
+const WarningText = styled.Text`
+  font-size: 12px;
+  color: #e01e1e;
+  padding: 7px 0 0 15px;
+  font-weight: bold;
+`;
+
 const SignUpView = styled.View`
   background-color: #fff;
   flex: 1;
@@ -171,12 +315,13 @@ const SignUpView = styled.View`
 `;
 
 const SignUpLabel = styled.Text`
+  margin-top: 20px;
   font-size: 12px;
   font-weight: 600;
 `;
 
 const SignupTextInput = styled.TextInput`
-  margin: 8px 0 20px;
+  margin: 8px 0 0;
   width: auto;
   padding: 16px;
   border: 1px solid #c4c4c4;
@@ -187,7 +332,7 @@ const SignupTextInput = styled.TextInput`
 `;
 
 const SignupPwTextInput = styled.TextInput`
-  margin: 8px 0 20px;
+  margin: 8px 0 0;
   padding: 16px;
   border: 1px solid #c4c4c4;
   border-radius: 8px;
@@ -238,14 +383,14 @@ const StyledButton = styled.TouchableOpacity`
 
 const SignUpButton = styled(StyledButton)`
   padding: 13px 0;
-  background-color: #065e85;
+  background-color: ${({disabled}) => (disabled ? '#c4c4c4' : '#065e85')};
   align-items: center;
   justify-content: center;
   height: 52px;
 `;
 const SignUpButtonText = styled.Text`
-  color: #fff;
   font-size: 18px;
+  color: #fff;
   font-weight: bold;
 `;
 
