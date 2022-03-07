@@ -36,7 +36,7 @@ const SignIn = ({navigation}: Props) => {
       return;
     }
     try {
-      const response = await fetch(fetchApi.Login, {
+      const response = await fetch(fetchApi.signin, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
