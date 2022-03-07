@@ -26,10 +26,6 @@ const SignIn = ({navigation}: Props) => {
   const [isPasswordType, setIsPasswordType] = useState(true);
 
   const dispatch = useDispatch();
-
-  console.log('dispatch');
-  console.log(dispatch);
-
   const changePasswordType = () => {
     setIsPasswordType(prev => !prev);
   };
@@ -40,7 +36,7 @@ const SignIn = ({navigation}: Props) => {
       return;
     }
     try {
-      const response = await fetch(fetchAPI.fetchLogin, {
+      const response = await fetch(fetchAPI.Login, {
         method: 'POST',
         headers: {
           Accept: 'application/json',

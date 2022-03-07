@@ -44,21 +44,28 @@ const ImageContainerView = styled.View`
   justify-content: center;
 `;
 
-const TouchContainerView = styled.View`
-  margin-bottom: 60px;
+const EntryView = styled.View`
+  width: 70%;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 `;
 
 const SignUpButton = styled.TouchableOpacity`
+  width: 100%;
   margin-top: 15px;
-  padding: 13px 120px;
+  padding-top: 13px;
+  padding-bottom: 13px;
   background-color: ${({theme}) => theme.color.primary};
   border-radius: 8px;
   align-items: center;
 `;
 
 const LoginButton = styled.TouchableOpacity`
+  width: 100%;
   margin-top: 15px;
-  padding: 13px 126px;
+  padding-top: 13px;
+  padding-bottom: 13px;
   background-color: ${({theme}) => theme.color.white};
   border: 1px solid ${({theme}) => theme.color.primary};
   border-radius: 8px;
@@ -75,12 +82,6 @@ const LoginText = styled.Text`
   font-size: 18px;
   font-weight: bold;
   color: ${props => props.theme.color.primary};
-`;
-
-const EntryView = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
 `;
 
 export default Entry;
