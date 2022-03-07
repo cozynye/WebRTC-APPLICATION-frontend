@@ -8,7 +8,7 @@ import {userLogin} from '~/module/auth';
 import Logo from 'assets/images/logo.png';
 import EyeOff from 'assets/images/icon_feather_eye_off.png';
 import Eye from 'assets/images/icon_feather_eye_on.png';
-import {fetchAPI} from '~/config';
+import {fetchApi} from '~/config';
 
 interface Props {
   navigation: StackNavigationProp<ParamListBase>;
@@ -36,7 +36,7 @@ const SignIn = ({navigation}: Props) => {
       return;
     }
     try {
-      const response = await fetch(fetchAPI.Login, {
+      const response = await fetch(fetchApi.Login, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
