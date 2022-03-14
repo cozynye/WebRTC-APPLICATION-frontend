@@ -13,10 +13,7 @@ import {
   registerGlobals,
 } from 'react-native-webrtc';
 import {View, ViewStyle} from 'react-native';
-import CameraImage from 'assets/images/camera_revers_btn.png';
-import AudioOnImage from 'assets/images/audio_on_btn.png';
-import VideoOnImage from 'assets/images/video_on_btn.png';
-import VideoOffImage from 'assets/images/video_off_btn.png';
+import {imageFile} from 'assets/images/index';
 
 interface Props {
   navigation: StackNavigationProp<ParamListBase>;
@@ -73,10 +70,6 @@ const VideoChat = ({}: Props) => {
 
   useEffect(() => {
     initVideo();
-  }, []);
-
-  useEffect(() => {
-    initVideo();
   }, [isFrontVideo, isVideo]);
 
   return (
@@ -95,7 +88,7 @@ const VideoChat = ({}: Props) => {
       <MainView>
         <View style={{width: 100}} />
         <DoctorNameView>
-          <DoctorNameText>Test1</DoctorNameText>
+          <DoctorNameText>Test11</DoctorNameText>
         </DoctorNameView>
         <PatientVideoView style={{borderRadius: 8, overflow: 'hidden'}}>
           <PatientNameView>
@@ -115,10 +108,10 @@ const VideoChat = ({}: Props) => {
           onPress={() => {
             setIsFrontVideo(prev => !prev);
           }}>
-          <TouchImage source={CameraImage} resizeMode="contain" />
+          <TouchImage source={imageFile.CameraImage} resizeMode="contain" />
         </TouchButton>
         <TouchButton activeOpacity={0.9}>
-          <TouchImage source={AudioOnImage} resizeMode="contain" />
+          <TouchImage source={imageFile.AudioOnImage} resizeMode="contain" />
         </TouchButton>
         <TouchButton
           activeOpacity={0.9}
@@ -126,7 +119,7 @@ const VideoChat = ({}: Props) => {
             setIsVideo(prev => !prev);
           }}>
           <TouchImage
-            source={isVideo ? VideoOnImage : VideoOffImage}
+            source={isVideo ? imageFile.VideoOnImage : imageFile.VideoOffImage}
             resizeMode="contain"
           />
         </TouchButton>
@@ -199,7 +192,6 @@ const PatientNameView = styled.View`
   bottom: 0;
   width: 100%;
   height: 32px;
-
   align-items: center;
   justify-content: center;
   background-color: ${({theme}) => theme.color.black};
@@ -217,10 +209,7 @@ const ButtonView = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 30px;
-  padding-bottom: 64px;
+  padding: 30px 10px 64px 10px;
   background-color: ${({theme}) => theme.color.black};
   opacity: 0.8;
 `;
