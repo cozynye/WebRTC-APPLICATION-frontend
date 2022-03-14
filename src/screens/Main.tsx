@@ -19,6 +19,11 @@ const Main = ({navigation}: Props) => {
     //   navigation.navigate('Entry');
     // }
   }, [auth.token]);
+
+  const goVideoChat = () => {
+    navigation.navigate('VideoChat');
+  };
+
   return (
     <ContainerView>
       <TextView>
@@ -30,7 +35,7 @@ const Main = ({navigation}: Props) => {
         <Image source={MainImage} resizeMode="contain" style={{height: 337}} />
       </ImageContainerView>
       <ConnectionButton>
-        <ConnectionText>화상연결</ConnectionText>
+        <ConnectionText onPress={goVideoChat}>화상연결</ConnectionText>
       </ConnectionButton>
     </ContainerView>
   );
@@ -54,11 +59,13 @@ const TextView = styled.View`
 const FirstLineText = styled.Text`
   font-size: 22px;
 `;
+
 const SecondLineText = styled.Text`
   padding-top: 12px;
   color: ${({theme}) => theme.color.primary};
   font-size: 26px;
 `;
+
 const ThirdLineText = styled.Text`
   padding-top: 12px;
   font-size: 12px;
@@ -73,6 +80,7 @@ const ConnectionButton = styled.TouchableOpacity`
   border-radius: 8px;
   align-items: center;
 `;
+
 const ConnectionText = styled.Text`
   font-size: 18px;
   font-weight: bold;

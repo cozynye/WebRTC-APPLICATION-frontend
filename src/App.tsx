@@ -5,6 +5,7 @@ import {ThemeProvider} from 'styled-components/native';
 import SignUp from '@screens/SignUp';
 import Entry from '@screens/Entry';
 import SignIn from '@screens/SignIn';
+import VideoChat from './screens/VideoChat';
 import Main from '@screens/Main';
 import theme from './styles/theme';
 import {createStore} from 'redux';
@@ -38,6 +39,11 @@ const App: FC = () => {
             <Stack.Screen
               name="Main"
               component={Main}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="VideoChat"
+              component={VideoChat}
               options={{headerShown: false}}
             />
           </Stack.Navigator>
