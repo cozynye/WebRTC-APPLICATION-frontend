@@ -13,7 +13,12 @@ import {
   registerGlobals,
 } from 'react-native-webrtc';
 import {View, ViewStyle} from 'react-native';
-import {imageFile} from 'assets/images/index';
+import {
+  CameraImage,
+  AudioOnImage,
+  VideoOnImage,
+  VideoOffImage,
+} from 'assets/images/index';
 
 interface Props {
   navigation: StackNavigationProp<ParamListBase>;
@@ -108,10 +113,10 @@ const VideoChat = ({}: Props) => {
           onPress={() => {
             setIsFrontVideo(prev => !prev);
           }}>
-          <TouchImage source={imageFile.CameraImage} resizeMode="contain" />
+          <TouchImage source={CameraImage} resizeMode="contain" />
         </TouchButton>
         <TouchButton activeOpacity={0.9}>
-          <TouchImage source={imageFile.AudioOnImage} resizeMode="contain" />
+          <TouchImage source={AudioOnImage} resizeMode="contain" />
         </TouchButton>
         <TouchButton
           activeOpacity={0.9}
@@ -119,7 +124,7 @@ const VideoChat = ({}: Props) => {
             setIsVideo(prev => !prev);
           }}>
           <TouchImage
-            source={isVideo ? imageFile.VideoOnImage : imageFile.VideoOffImage}
+            source={isVideo ? VideoOnImage : VideoOffImage}
             resizeMode="contain"
           />
         </TouchButton>
