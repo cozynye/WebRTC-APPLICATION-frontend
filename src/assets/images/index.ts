@@ -3,9 +3,4 @@ import AudioOnImage from './audio_on_btn.png';
 import VideoOnImage from './video_on_btn.png';
 import VideoOffImage from './video_off_btn.png';
 
-export const imageFile = {
-  CameraImage,
-  AudioOnImage,
-  VideoOnImage,
-  VideoOffImage,
-};
+export {CameraImage, AudioOnImage, VideoOnImage, VideoOffImage};

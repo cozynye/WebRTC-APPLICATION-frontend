@@ -52,8 +52,8 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSCameraUsageDescription</key>
-	<string>Camera permission description</string>
+	<string>The purpose of non-face-to-face treatment</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Microphone permission description</string>
+	<string>The purpose of non-face-to-face treatment</string>
 </dict>
 </plist>
