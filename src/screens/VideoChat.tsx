@@ -16,9 +16,10 @@ import {View, ViewStyle} from 'react-native';
 import {
   CameraImage,
   AudioOnImage,
+  AudioOffImage,
   VideoOnImage,
   VideoOffImage,
-} from 'assets/images/index';
+} from 'assets/images';
 
 interface Props {
   navigation: StackNavigationProp<ParamListBase>;
@@ -42,6 +43,7 @@ const VideoChat = ({}: Props) => {
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [isFrontVideo, setIsFrontVideo] = useState(true);
   const [isVideo, setIsVideo] = useState(true);
+  const [isAudio, setIsAudio] = useState(true);
 
   const initVideo = async () => {
     const configuration = {
@@ -56,10 +58,10 @@ const VideoChat = ({}: Props) => {
       iceCandidatePoolSize: 10,
     };
     const localPC = new RTCPeerConnection(configuration);
-    const medias = await mediaDevices.enumerateDevices();
+    await mediaDevices.enumerateDevices();
     mediaDevices
       .getUserMedia({
-        audio: true,
+        audio: isAudio,
         video: isVideo
           ? {facingMode: isFrontVideo ? 'user' : 'environment'}
           : false,
@@ -115,8 +117,15 @@ const VideoChat = ({}: Props) => {
           }}>
           <TouchImage source={CameraImage} resizeMode="contain" />
         </TouchButton>
-        <TouchButton activeOpacity={0.9}>
-          <TouchImage source={AudioOnImage} resizeMode="contain" />
+        <TouchButton
+          activeOpacity={0.9}
+          onPress={() => {
+            setIsAudio(prev => !prev);
+          }}>
+          <TouchImage
+            source={isAudio ? AudioOnImage : AudioOffImage}
+            resizeMode="contain"
+          />
         </TouchButton>
         <TouchButton
           activeOpacity={0.9}
