@@ -40,6 +40,7 @@ const patientVideoStyle: ViewStyle = {
 
 const VideoChat = ({}: Props) => {
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
+  const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const [isFrontVideo, setIsFrontVideo] = useState(true);
   const [isVideo, setIsVideo] = useState(true);
 
@@ -47,16 +48,28 @@ const VideoChat = ({}: Props) => {
     const configuration = {
       iceServers: [
         {
-          urls: [
-            'stun:stun1.l.google.com:19302',
-            'stun:stun2.l.google.com:19302',
-          ],
+          urls: 'turn:jeonhwageoleo.site:3478',
+          username: 'jiyeon',
+          credential: 'test4841',
         },
       ],
       iceCandidatePoolSize: 10,
     };
+
     const localPC = new RTCPeerConnection(configuration);
-    const medias = await mediaDevices.enumerateDevices();
+    const remotePC = new RTCPeerConnection(configuration);
+
+    // const medias = await mediaDevices.enumerateDevices();
+
+    const socket = new WebSocket('ws://192.168.0.176:8001/ws/call/test');
+
+    socket.onopen = () => {
+      console.log('open server');
+    };
+    socket.onmessage = (message: any) => {
+      console.log('message1');
+      console.log(message);
+    };
     mediaDevices
       .getUserMedia({
         audio: true,
@@ -71,6 +84,82 @@ const VideoChat = ({}: Props) => {
       .catch(error => {
         console.log(error);
       });
+
+    // 네트워크 정보 교환하기
+    localPC.onicecandidate = e => {
+      console.log('onicecandidate');
+      try {
+        // console.log('localPC icecandidate:', e.candidate);
+        if (e.candidate) {
+          socket.send(
+            JSON.stringify({
+              type: 'ICEcandidate',
+              data: {
+                message: e.candidate,
+              },
+            }),
+          );
+          socket.onmessage = async message => {
+            console.log('candi!!!!!!!!');
+            const data = JSON.parse(message.data);
+            console.log(data);
+            if (data.type === 'ICEcandidate') {
+              console.log('야호');
+              await localPC.addIceCandidate(data.message.candidate);
+            }
+          };
+
+          // remotePC.addIceCandidate(e.candidate);
+        }
+      } catch (err) {
+        console.error(`Error adding remotePC iceCandidate: ${err}`);
+      }
+    };
+    // remotePC.onicecandidate = e => {
+    //   try {
+    //     // console.log('remotePC icecandidate:', e.candidate);
+    //     if (e.candidate) {
+    //       localPC.addIceCandidate(e.candidate);
+    //     }
+    //   } catch (err) {
+    //     console.error(`Error adding localPC iceCandidate: ${err}`);
+    //   }
+    // };
+
+    // 스트림 추가
+    // remotePC.onaddstream = e => {
+    //   if (e.stream && remoteStream !== e.stream) {
+    //     setRemoteStream(e.stream);
+    //   }
+    // };
+
+    try {
+      //Offer SDP(Session Description Protocol) 생성 브라우저에서 사용하능한 코덱이나 해상도에 대한 정보
+      const offer = await localPC.createOffer();
+      console.log('Offer from localPC, setLocalDescription');
+
+      console.log(offer);
+      console.log('offer');
+      await localPC.setLocalDescription(offer);
+
+      // console.log('remotePC, setRemoteDescription');
+      // await remotePC.setRemoteDescription(localPC.localDescription);
+      // 현재 remote는 상대 session에 대한 정보를 알고 있고
+      // console.log('RemotePC, createAnswer');
+      //Answer SDP 를 생성하여 Signaling Channel 을 통해 local에게 전달
+      // const answer = await remotePC.createAnswer();
+      // console.log(`Answer from remotePC: ${answer.sdp}`);
+      // console.log('remotePC, setLocalDescription');
+      // await remotePC.setLocalDescription(answer);
+      // console.log('localPC, setRemoteDescription');
+      // await localPC.setRemoteDescription(remotePC.localDescription);
+
+      socket.onclose = () => {
+        console.log('closed server');
+      };
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -93,14 +182,14 @@ const VideoChat = ({}: Props) => {
       <MainView>
         <View style={{width: 100}} />
         <DoctorNameView>
-          <DoctorNameText>Test11</DoctorNameText>
+          <DoctorNameText>Test1</DoctorNameText>
         </DoctorNameView>
         <PatientVideoView style={{borderRadius: 8, overflow: 'hidden'}}>
           <PatientNameView>
             <PatientNameText>Test2</PatientNameText>
           </PatientNameView>
           <RTCView
-            streamURL={localStream ? localStream.toURL() : ''}
+            streamURL={remoteStream ? remoteStream.toURL() : ''}
             style={patientVideoStyle}
             objectFit="cover"
           />
