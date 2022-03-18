@@ -70,6 +70,7 @@ const VideoChat = ({}: Props) => {
       console.log('message1');
       console.log(message);
     };
+
     mediaDevices
       .getUserMedia({
         audio: true,
@@ -87,9 +88,7 @@ const VideoChat = ({}: Props) => {
 
     // 네트워크 정보 교환하기
     localPC.onicecandidate = e => {
-      console.log('onicecandidate');
       try {
-        // console.log('localPC icecandidate:', e.candidate);
         if (e.candidate) {
           socket.send(
             JSON.stringify({
@@ -100,39 +99,16 @@ const VideoChat = ({}: Props) => {
             }),
           );
           socket.onmessage = async message => {
-            console.log('candi!!!!!!!!');
             const data = JSON.parse(message.data);
-            console.log(data);
             if (data.type === 'ICEcandidate') {
-              console.log('야호');
               await localPC.addIceCandidate(data.message.candidate);
             }
           };
-
-          // remotePC.addIceCandidate(e.candidate);
         }
       } catch (err) {
         console.error(`Error adding remotePC iceCandidate: ${err}`);
       }
     };
-    // remotePC.onicecandidate = e => {
-    //   try {
-    //     // console.log('remotePC icecandidate:', e.candidate);
-    //     if (e.candidate) {
-    //       localPC.addIceCandidate(e.candidate);
-    //     }
-    //   } catch (err) {
-    //     console.error(`Error adding localPC iceCandidate: ${err}`);
-    //   }
-    // };
-
-    // 스트림 추가
-    // remotePC.onaddstream = e => {
-    //   if (e.stream && remoteStream !== e.stream) {
-    //     setRemoteStream(e.stream);
-    //   }
-    // };
-
     try {
       //Offer SDP(Session Description Protocol) 생성 브라우저에서 사용하능한 코덱이나 해상도에 대한 정보
       const offer = await localPC.createOffer();
