@@ -11,8 +11,6 @@ target 'WebRTC' do
     :hermes_enabled => false
   )
 
-
-
   target 'WebRTCTests' do
     inherit! :complete
     # Pods for testing
