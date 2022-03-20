@@ -3,6 +3,7 @@ import {Alert, View} from 'react-native';
 import styled from 'styled-components/native';
 import {useDispatch} from 'react-redux';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {ParamListBase} from '@react-navigation/native';
 import {userLogin} from '~/module/auth';
 import LeftButton from '@images/icon_feather_arrow_left.png';
@@ -20,8 +21,6 @@ const SignUp = ({navigation}: Props) => {
   };
 
   const dispatch = useDispatch();
-  // const textInputs = useSelector(store => store.signUp);
-  // console.log(textInputs);
 
   const [textInputs, setTextInputs] = useState({
     surname: '',
@@ -156,124 +155,142 @@ const SignUp = ({navigation}: Props) => {
   };
 
   return (
-    <SignUpView>
-      <View>
-        <SignUpHeaderView>
-          <SignUpHeaderText>회원가입</SignUpHeaderText>
-          <GoBackButton onPress={() => changeScreen('Entry')}>
-            <GoBackImage source={LeftButton} />
-          </GoBackButton>
-        </SignUpHeaderView>
-        <SignUpInputs>
-          <TwoInputs>
-            <SurnameView>
-              <View>
-                <SignUpLabel>성</SignUpLabel>
-                <SignupTextInput
-                  onChangeText={(text: string) =>
-                    handleInputChange('surname', text)
-                  }
-                  value={surname}
-                  placeholder="성을 입력해주세요"
-                />
-              </View>
-            </SurnameView>
-            <NameView>
-              <View>
-                <SignUpLabel>이름</SignUpLabel>
-                <SignupTextInput
-                  onChangeText={(text: string) =>
-                    handleInputChange('name', text)
-                  }
-                  value={name}
-                  placeholder="이름을 입력해주세요"
-                />
-              </View>
-            </NameView>
-          </TwoInputs>
+    <KeyboardAwareScrollView>
+      <SignUpView>
+        <SignUpHeaderInputView>
+          <SignUpHeaderView>
+            <SignUpHeaderText>회원가입</SignUpHeaderText>
+            <GoBackButton onPress={() => changeScreen('Entry')}>
+              <GoBackImage source={LeftButton} />
+            </GoBackButton>
+          </SignUpHeaderView>
+          <SignUpInputs>
+            <TwoInputs>
+              <SurnameView>
+                <View>
+                  <SignUpLabel>성</SignUpLabel>
+                  <SignupTextInput
+                    onChangeText={(text: string) =>
+                      handleInputChange('surname', text)
+                    }
+                    value={surname}
+                    placeholder="성을 입력해주세요"
+                  />
+                </View>
+              </SurnameView>
+              <NameView>
+                <View>
+                  <SignUpLabel>이름</SignUpLabel>
+                  <SignupTextInput
+                    onChangeText={(text: string) =>
+                      handleInputChange('name', text)
+                    }
+                    value={name}
+                    placeholder="이름을 입력해주세요"
+                  />
+                </View>
+              </NameView>
+            </TwoInputs>
 
-          <View>
-            <SignUpLabel>이메일</SignUpLabel>
-            <SignupTextInput
-              onChangeText={(text: string) => handleInputChange('email', text)}
-              value={email}
-              placeholder="이메일을 입력해주세요"
-              autoCapitalize="none"
-            />
-          </View>
-
-          {warnings.isEmailExisting && (
-            <WarningText>
-              {emailWarningText
-                ? '이미 등록된 이메일 주소입니다'
-                : '유효한 이메일 주소를 입력해 주세요'}
-            </WarningText>
-          )}
-
-          <View>
-            <SignUpLabel>비밀번호</SignUpLabel>
-            <PwInputView>
-              <SignupPwTextInput
-                secureTextEntry={showPw.pw}
+            <View>
+              <SignUpLabel>이메일</SignUpLabel>
+              <SignupTextInput
                 onChangeText={(text: string) =>
-                  handleInputChange('password', text)
+                  handleInputChange('email', text)
                 }
-                value={password}
-                placeholder="비밀번호를 입력해주세요"
+                value={email}
+                placeholder="이메일을 입력해주세요"
                 autoCapitalize="none"
               />
-              <ShowPwButton onPress={() => handlePwShow('pw', showPw.pw)}>
-                <ShowPwImage
-                  source={showPw.pw ? showPwImage : hidePwImage}
-                  resizeMode="contain"
+            </View>
+
+            {warnings.isEmailExisting && (
+              <WarningText>
+                {emailWarningText
+                  ? '이미 등록된 이메일 주소입니다'
+                  : '유효한 이메일 주소를 입력해 주세요'}
+              </WarningText>
+            )}
+
+            <View>
+              <SignUpLabel>비밀번호</SignUpLabel>
+              <PwInputView>
+                <SignupPwTextInput
+                  secureTextEntry={showPw.pw}
+                  onChangeText={(text: string) =>
+                    handleInputChange('password', text)
+                  }
+                  value={password}
+                  placeholder="비밀번호를 입력해주세요"
+                  autoCapitalize="none"
                 />
-              </ShowPwButton>
-            </PwInputView>
-          </View>
+                <ShowPwButton onPress={() => handlePwShow('pw', showPw.pw)}>
+                  <ShowPwImage
+                    source={showPw.pw ? showPwImage : hidePwImage}
+                    resizeMode="contain"
+                  />
+                </ShowPwButton>
+              </PwInputView>
+            </View>
 
-          {warnings.isPwValid && (
-            <WarningText>
-              숫자와 영문자 조합 8자리 이상을 입력해 주세요.
-            </WarningText>
-          )}
+            {warnings.isPwValid && (
+              <WarningText>
+                숫자와 영문자 조합 8자리 이상을 입력해 주세요.
+              </WarningText>
+            )}
 
-          <View>
-            <SignUpLabel>비밀번호 확인</SignUpLabel>
-            <PwInputView>
-              <SignupPwTextInput
-                autoCapitalize="none"
-                secureTextEntry={showPw.pwVerify}
-                onChangeText={(text: string) =>
-                  handleInputChange('passwordVerify', text)
-                }
-                value={textInputs.passwordVerify}
-                placeholder="비밀번호를 다시 입력해주세요"
-              />
-              <ShowPwButton
-                onPress={() => handlePwShow('pwVerify', showPw.pwVerify)}>
-                <ShowPwImage
-                  source={showPw.pwVerify ? showPwImage : hidePwImage}
-                  resizeMode="contain"
+            <View>
+              <SignUpLabel>비밀번호 확인</SignUpLabel>
+              <PwInputView>
+                <SignupPwTextInput
+                  autoCapitalize="none"
+                  secureTextEntry={showPw.pwVerify}
+                  onChangeText={(text: string) =>
+                    handleInputChange('passwordVerify', text)
+                  }
+                  value={textInputs.passwordVerify}
+                  placeholder="비밀번호를 다시 입력해주세요"
                 />
-              </ShowPwButton>
-            </PwInputView>
-          </View>
+                <ShowPwButton
+                  onPress={() => handlePwShow('pwVerify', showPw.pwVerify)}>
+                  <ShowPwImage
+                    source={showPw.pwVerify ? showPwImage : hidePwImage}
+                    resizeMode="contain"
+                  />
+                </ShowPwButton>
+              </PwInputView>
+            </View>
 
-          {warnings.isPwMatching && (
-            <WarningText>비밀번호가 일치하지 않습니다.</WarningText>
-          )}
-        </SignUpInputs>
-      </View>
-      <SignUpButton
-        disabled={submitDisabled}
-        onPress={() => {
-          submitSignUpData();
-        }}>
-        <SignUpButtonText>가입 완료</SignUpButtonText>
-      </SignUpButton>
-    </SignUpView>
+            {warnings.isPwMatching && (
+              <WarningText>비밀번호가 일치하지 않습니다.</WarningText>
+            )}
+          </SignUpInputs>
+        </SignUpHeaderInputView>
+        <SignUpButtonView>
+          <SignUpButton
+            disabled={submitDisabled}
+            onPress={() => {
+              submitSignUpData();
+            }}>
+            <SignUpButtonText>가입 완료</SignUpButtonText>
+          </SignUpButton>
+        </SignUpButtonView>
+      </SignUpView>
+    </KeyboardAwareScrollView>
   );
 };
+
+const SignUpView = styled.View`
+  background-color: #fff;
+  flex: 1;
+  width: auto;
+  justify-content: space-between;
+  padding: 60px 33px;
+`;
+
+const SignUpHeaderInputView = styled.View`
+  padding-bottom: 20%;
+`;
 
 const SignUpHeaderView = styled.View`
   flex-direction: row;
@@ -283,6 +300,7 @@ const SignUpHeaderView = styled.View`
 
 const SignUpHeaderText = styled.Text`
   font-size: 18px;
+  color: ${({theme}) => theme.color.black};
   font-weight: bold;
 `;
 
@@ -306,15 +324,8 @@ const WarningText = styled.Text`
   font-weight: bold;
 `;
 
-const SignUpView = styled.View`
-  background-color: #fff;
-  flex: 1;
-  width: auto;
-  justify-content: space-between;
-  padding: 60px 33px;
-`;
-
 const SignUpLabel = styled.Text`
+  color: ${({theme}) => theme.color.black};
   margin-top: 20px;
   font-size: 12px;
   font-weight: 600;
@@ -322,6 +333,7 @@ const SignUpLabel = styled.Text`
 
 const SignupTextInput = styled.TextInput`
   margin: 8px 0 0;
+  color: ${({theme}) => theme.color.black};
   width: auto;
   padding: 16px;
   border: 1px solid #c4c4c4;
@@ -369,7 +381,7 @@ const ShowPwButton = styled.TouchableOpacity`
   height: 16.8px;
   position: absolute;
   right: 15px;
-  top: 24.3px;
+  top: 44%;
 `;
 
 const ShowPwImage = styled.Image`
@@ -379,6 +391,9 @@ const ShowPwImage = styled.Image`
 
 const StyledButton = styled.TouchableOpacity`
   border-radius: 8px;
+`;
+const SignUpButtonView = styled.View`
+  padding-bottom: 7%;
 `;
 
 const SignUpButton = styled(StyledButton)`

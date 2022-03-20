@@ -41,12 +41,24 @@ const patientVideoStyle: ViewStyle = {
 
 const VideoChat = ({}: Props) => {
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
-  const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const [isFrontVideo, setIsFrontVideo] = useState(true);
   const [isVideo, setIsVideo] = useState(true);
   const [isAudio, setIsAudio] = useState(true);
 
+  const configuration = {
+    iceServers: [
+      {
+        urls: [
+          'stun:stun1.l.google.com:19302',
+          'stun:stun2.l.google.com:19302',
+        ],
+      },
+    ],
+    iceCandidatePoolSize: 10,
+  };
+  const localPC = new RTCPeerConnection(configuration);
   const initVideo = async () => {
+<<<<<<< HEAD
     const configuration = {
       iceServers: [
         {
@@ -77,22 +89,21 @@ const VideoChat = ({}: Props) => {
 =======
 <<<<<<< HEAD
 >>>>>>> 3e87ea5 (Conflict resolved)
-    await mediaDevices.enumerateDevices();
 =======
-    const remotePC = new RTCPeerConnection(configuration);
-
-    // const medias = await mediaDevices.enumerateDevices();
-
-    const socket = new WebSocket('ws://192.168.0.176:8001/ws/call/test');
-
-    socket.onopen = () => {
-      console.log('open server');
-    };
-    socket.onmessage = (message: any) => {
-      console.log('message1');
-      console.log(message);
-    };
->>>>>>> 778e93b (Add : 화상연결 리모트 연결 중)
+    // const configuration = {
+    //   iceServers: [
+    //     {
+    //       urls: [
+    //         'stun:stun1.l.google.com:19302',
+    //         'stun:stun2.l.google.com:19302',
+    //       ],
+    //     },
+    //   ],
+    //   iceCandidatePoolSize: 10,
+    // };
+    // const localPC = new RTCPeerConnection(configuration);
+>>>>>>> 3e24248 (Fix Inputs being hidden by keyboard)
+    await mediaDevices.enumerateDevices();
     mediaDevices
       .getUserMedia({
         audio: isAudio,
@@ -107,6 +118,7 @@ const VideoChat = ({}: Props) => {
       .catch(error => {
         console.log(error);
       });
+<<<<<<< HEAD
 
     // 네트워크 정보 교환하기
     localPC.onicecandidate = e => {
@@ -198,7 +210,19 @@ const VideoChat = ({}: Props) => {
     } catch (err) {
       console.error(err);
     }
+=======
+>>>>>>> 3e24248 (Fix Inputs being hidden by keyboard)
   };
+
+  localPC.createOffer().then(offer => {
+    localPC.setLocalDescription(offer).then(() => {
+      console.log('Sending Offer');
+      send({
+        type: 'offer',
+        offer: offer,
+      });
+    });
+  });
 
   useEffect(() => {
     initVideo();
@@ -220,14 +244,14 @@ const VideoChat = ({}: Props) => {
       <MainView>
         <View style={{width: 100}} />
         <DoctorNameView>
-          <DoctorNameText>Test1</DoctorNameText>
+          <DoctorNameText>Test11</DoctorNameText>
         </DoctorNameView>
         <PatientVideoView style={{borderRadius: 8, overflow: 'hidden'}}>
           <PatientNameView>
             <PatientNameText>Test2</PatientNameText>
           </PatientNameView>
           <RTCView
-            streamURL={remoteStream ? remoteStream.toURL() : ''}
+            streamURL={localStream ? localStream.toURL() : ''}
             style={patientVideoStyle}
             objectFit="cover"
           />
