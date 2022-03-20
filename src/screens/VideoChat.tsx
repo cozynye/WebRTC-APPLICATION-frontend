@@ -59,6 +59,7 @@ const VideoChat = ({}: Props) => {
     };
 
     const localPC = new RTCPeerConnection(configuration);
+<<<<<<< HEAD
     const remotePC = new RTCPeerConnection(configuration);
 
     // const medias = await mediaDevices.enumerateDevices();
@@ -73,7 +74,25 @@ const VideoChat = ({}: Props) => {
       console.log(message);
     };
 
+=======
+<<<<<<< HEAD
+>>>>>>> 3e87ea5 (Conflict resolved)
     await mediaDevices.enumerateDevices();
+=======
+    const remotePC = new RTCPeerConnection(configuration);
+
+    // const medias = await mediaDevices.enumerateDevices();
+
+    const socket = new WebSocket('ws://192.168.0.176:8001/ws/call/test');
+
+    socket.onopen = () => {
+      console.log('open server');
+    };
+    socket.onmessage = (message: any) => {
+      console.log('message1');
+      console.log(message);
+    };
+>>>>>>> 778e93b (Add : 화상연결 리모트 연결 중)
     mediaDevices
       .getUserMedia({
         audio: isAudio,
@@ -91,7 +110,13 @@ const VideoChat = ({}: Props) => {
 
     // 네트워크 정보 교환하기
     localPC.onicecandidate = e => {
+<<<<<<< HEAD
       try {
+=======
+      console.log('onicecandidate');
+      try {
+        // console.log('localPC icecandidate:', e.candidate);
+>>>>>>> 3e87ea5 (Conflict resolved)
         if (e.candidate) {
           socket.send(
             JSON.stringify({
@@ -102,16 +127,50 @@ const VideoChat = ({}: Props) => {
             }),
           );
           socket.onmessage = async message => {
+<<<<<<< HEAD
             const data = JSON.parse(message.data);
             if (data.type === 'ICEcandidate') {
               await localPC.addIceCandidate(data.message.candidate);
             }
           };
+=======
+            console.log('candi!!!!!!!!');
+            const data = JSON.parse(message.data);
+            console.log(data);
+            if (data.type === 'ICEcandidate') {
+              console.log('야호');
+              await localPC.addIceCandidate(data.message.candidate);
+            }
+          };
+
+          // remotePC.addIceCandidate(e.candidate);
+>>>>>>> 3e87ea5 (Conflict resolved)
         }
       } catch (err) {
         console.error(`Error adding remotePC iceCandidate: ${err}`);
       }
     };
+<<<<<<< HEAD
+=======
+    // remotePC.onicecandidate = e => {
+    //   try {
+    //     // console.log('remotePC icecandidate:', e.candidate);
+    //     if (e.candidate) {
+    //       localPC.addIceCandidate(e.candidate);
+    //     }
+    //   } catch (err) {
+    //     console.error(`Error adding localPC iceCandidate: ${err}`);
+    //   }
+    // };
+
+    // 스트림 추가
+    // remotePC.onaddstream = e => {
+    //   if (e.stream && remoteStream !== e.stream) {
+    //     setRemoteStream(e.stream);
+    //   }
+    // };
+
+>>>>>>> 3e87ea5 (Conflict resolved)
     try {
       //Offer SDP(Session Description Protocol) 생성 브라우저에서 사용하능한 코덱이나 해상도에 대한 정보
       const offer = await localPC.createOffer();
