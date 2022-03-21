@@ -41,24 +41,12 @@ const patientVideoStyle: ViewStyle = {
 
 const VideoChat = ({}: Props) => {
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
+  const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const [isFrontVideo, setIsFrontVideo] = useState(true);
   const [isVideo, setIsVideo] = useState(true);
   const [isAudio, setIsAudio] = useState(true);
 
-  const configuration = {
-    iceServers: [
-      {
-        urls: [
-          'stun:stun1.l.google.com:19302',
-          'stun:stun2.l.google.com:19302',
-        ],
-      },
-    ],
-    iceCandidatePoolSize: 10,
-  };
-  const localPC = new RTCPeerConnection(configuration);
   const initVideo = async () => {
-<<<<<<< HEAD
     const configuration = {
       iceServers: [
         {
@@ -71,7 +59,6 @@ const VideoChat = ({}: Props) => {
     };
 
     const localPC = new RTCPeerConnection(configuration);
-<<<<<<< HEAD
     const remotePC = new RTCPeerConnection(configuration);
 
     // const medias = await mediaDevices.enumerateDevices();
@@ -86,24 +73,6 @@ const VideoChat = ({}: Props) => {
       console.log(message);
     };
 
-=======
-<<<<<<< HEAD
->>>>>>> 3e87ea5 (Conflict resolved)
-=======
-    // const configuration = {
-    //   iceServers: [
-    //     {
-    //       urls: [
-    //         'stun:stun1.l.google.com:19302',
-    //         'stun:stun2.l.google.com:19302',
-    //       ],
-    //     },
-    //   ],
-    //   iceCandidatePoolSize: 10,
-    // };
-    // const localPC = new RTCPeerConnection(configuration);
->>>>>>> 3e24248 (Fix Inputs being hidden by keyboard)
-    await mediaDevices.enumerateDevices();
     mediaDevices
       .getUserMedia({
         audio: isAudio,
@@ -118,17 +87,10 @@ const VideoChat = ({}: Props) => {
       .catch(error => {
         console.log(error);
       });
-<<<<<<< HEAD
 
     // 네트워크 정보 교환하기
     localPC.onicecandidate = e => {
-<<<<<<< HEAD
       try {
-=======
-      console.log('onicecandidate');
-      try {
-        // console.log('localPC icecandidate:', e.candidate);
->>>>>>> 3e87ea5 (Conflict resolved)
         if (e.candidate) {
           socket.send(
             JSON.stringify({
@@ -139,50 +101,16 @@ const VideoChat = ({}: Props) => {
             }),
           );
           socket.onmessage = async message => {
-<<<<<<< HEAD
             const data = JSON.parse(message.data);
             if (data.type === 'ICEcandidate') {
               await localPC.addIceCandidate(data.message.candidate);
             }
           };
-=======
-            console.log('candi!!!!!!!!');
-            const data = JSON.parse(message.data);
-            console.log(data);
-            if (data.type === 'ICEcandidate') {
-              console.log('야호');
-              await localPC.addIceCandidate(data.message.candidate);
-            }
-          };
-
-          // remotePC.addIceCandidate(e.candidate);
->>>>>>> 3e87ea5 (Conflict resolved)
         }
       } catch (err) {
         console.error(`Error adding remotePC iceCandidate: ${err}`);
       }
     };
-<<<<<<< HEAD
-=======
-    // remotePC.onicecandidate = e => {
-    //   try {
-    //     // console.log('remotePC icecandidate:', e.candidate);
-    //     if (e.candidate) {
-    //       localPC.addIceCandidate(e.candidate);
-    //     }
-    //   } catch (err) {
-    //     console.error(`Error adding localPC iceCandidate: ${err}`);
-    //   }
-    // };
-
-    // 스트림 추가
-    // remotePC.onaddstream = e => {
-    //   if (e.stream && remoteStream !== e.stream) {
-    //     setRemoteStream(e.stream);
-    //   }
-    // };
-
->>>>>>> 3e87ea5 (Conflict resolved)
     try {
       //Offer SDP(Session Description Protocol) 생성 브라우저에서 사용하능한 코덱이나 해상도에 대한 정보
       const offer = await localPC.createOffer();
@@ -210,19 +138,7 @@ const VideoChat = ({}: Props) => {
     } catch (err) {
       console.error(err);
     }
-=======
->>>>>>> 3e24248 (Fix Inputs being hidden by keyboard)
   };
-
-  localPC.createOffer().then(offer => {
-    localPC.setLocalDescription(offer).then(() => {
-      console.log('Sending Offer');
-      send({
-        type: 'offer',
-        offer: offer,
-      });
-    });
-  });
 
   useEffect(() => {
     initVideo();
@@ -244,14 +160,14 @@ const VideoChat = ({}: Props) => {
       <MainView>
         <View style={{width: 100}} />
         <DoctorNameView>
-          <DoctorNameText>Test11</DoctorNameText>
+          <DoctorNameText>Test1</DoctorNameText>
         </DoctorNameView>
         <PatientVideoView style={{borderRadius: 8, overflow: 'hidden'}}>
           <PatientNameView>
             <PatientNameText>Test2</PatientNameText>
           </PatientNameView>
           <RTCView
-            streamURL={localStream ? localStream.toURL() : ''}
+            streamURL={remoteStream ? remoteStream.toURL() : ''}
             style={patientVideoStyle}
             objectFit="cover"
           />
