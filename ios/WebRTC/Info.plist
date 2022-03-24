@@ -35,8 +35,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>The purpose of non-face-to-face treatment</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>The purpose of non-face-to-face treatment</string>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -51,9 +55,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSCameraUsageDescription</key>
-	<string>The purpose of non-face-to-face treatment</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>The purpose of non-face-to-face treatment</string>
 </dict>
 </plist>

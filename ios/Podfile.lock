@@ -284,6 +284,8 @@ PODS:
     - React-jsi (= 0.67.3)
     - React-logger (= 0.67.3)
     - React-perflogger (= 0.67.3)
+  - ReactNativeIncallManager (3.3.0):
+    - React
   - RNGestureHandler (2.3.1):
     - React-Core
   - RNScreens (3.13.1):
@@ -326,6 +328,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeIncallManager (from `../node_modules/react-native-incall-manager`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -399,6 +402,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeIncallManager:
+    :path: "../node_modules/react-native-incall-manager"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNScreens:
@@ -440,10 +445,11 @@ SPEC CHECKSUMS:
   React-RCTVibration: d0361f15ea978958fab7ffb6960f475b5063d83f
   React-runtimeexecutor: af1946623656f9c5fd64ca6f36f3863516193446
   ReactCommon: 650e33cde4fb7d36781cd3143f5276da0abb2f96
+  ReactNativeIncallManager: a840ef75640518065742a893e6c6ff98ee820039
   RNGestureHandler: 68f660f1080d3300936a67ce5c6879bd8f26ecc2
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
   Yoga: 90dcd029e45d8a7c1ff059e8b3c6612ff409061a
 
-PODFILE CHECKSUM: b87ddf31e20300ccd6d80e3f0bdb44898332c73f
+PODFILE CHECKSUM: 89e968b4813108a6d38aa6c57b61fa742954f1b8
 
 COCOAPODS: 1.11.2

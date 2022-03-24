@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Alert, Image} from 'react-native';
 import styled from 'styled-components/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {ParamListBase} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {userLogin} from '~/module/auth';
@@ -69,41 +70,43 @@ const SignIn = ({navigation}: Props) => {
     }
   };
   return (
-    <ContainerView>
-      <ImageContainerView>
-        <Image source={Logo} />
-      </ImageContainerView>
-      <InfomationContainerView>
-        <InputContainerView>
-          <LabelText>이메일</LabelText>
-          <InputTextInput
-            placeholder="이메일을 입력해주세요"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={text => setInputState({...inputState, email: text})}
-          />
-        </InputContainerView>
-        <InputContainerView>
-          <LabelText>비밀번호</LabelText>
-          <PassWordView>
+    <KeyboardAwareScrollView>
+      <ContainerView>
+        <ImageContainerView>
+          <Image source={Logo} />
+        </ImageContainerView>
+        <InfomationContainerView>
+          <InputContainerView>
+            <LabelText>이메일</LabelText>
             <InputTextInput
-              placeholder="비밀번호를 입력해주세요"
-              value={password}
-              onChangeText={text =>
-                setInputState({...inputState, password: text})
-              }
-              secureTextEntry={isPasswordType}
+              placeholder="이메일을 입력해주세요"
+              autoCapitalize="none"
+              value={email}
+              onChangeText={text => setInputState({...inputState, email: text})}
             />
-            <IconButton onPress={changePasswordType} activeOpacity={0.9}>
-              <Image source={isPasswordType ? EyeOff : Eye} />
-            </IconButton>
-          </PassWordView>
-        </InputContainerView>
-      </InfomationContainerView>
-      <LoginButton onPress={login}>
-        <LoginText>로그인</LoginText>
-      </LoginButton>
-    </ContainerView>
+          </InputContainerView>
+          <InputContainerView>
+            <LabelText>비밀번호</LabelText>
+            <PassWordView>
+              <InputTextInput
+                placeholder="비밀번호를 입력해주세요"
+                value={password}
+                onChangeText={text =>
+                  setInputState({...inputState, password: text})
+                }
+                secureTextEntry={isPasswordType}
+              />
+              <IconButton onPress={changePasswordType} activeOpacity={0.9}>
+                <Image source={isPasswordType ? EyeOff : Eye} />
+              </IconButton>
+            </PassWordView>
+          </InputContainerView>
+        </InfomationContainerView>
+        <LoginButton onPress={login}>
+          <LoginText>로그인</LoginText>
+        </LoginButton>
+      </ContainerView>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -116,11 +119,13 @@ const ContainerView = styled.View`
 
 const ImageContainerView = styled.View`
   margin-top: 100px;
+  padding-bottom: 18%;
   flex: 1;
 `;
 
 const InfomationContainerView = styled.View`
   flex: 2;
+  padding-bottom: 38%;
 `;
 
 const InputContainerView = styled.View`
@@ -128,11 +133,13 @@ const InputContainerView = styled.View`
 `;
 const LabelText = styled.Text`
   font-size: 12px;
+  color: ${({theme}) => theme.color.black};
 `;
 const InputTextInput = styled.TextInput`
   width: 300px;
   margin-top: 7px;
   padding: 15px;
+  color: ${({theme}) => theme.color.black};
   border: 1px solid black;
   background-color: ${({theme}) => theme.color.white};
   border-radius: 8px;
@@ -149,7 +156,7 @@ const LoginButton = styled.TouchableOpacity`
 const LoginText = styled.Text`
   font-size: 18px;
   font-weight: bold;
-  color: ${({theme}) => theme.color.white};
+  color: ${({theme}) => theme.color.black};
 `;
 
 const PassWordView = styled.View`

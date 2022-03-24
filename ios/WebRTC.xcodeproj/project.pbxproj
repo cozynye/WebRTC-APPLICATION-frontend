@@ -12,7 +12,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		E476FF4827CF09B5002466CC /* ios in Resources */ = {isa = PBXBuildFile; fileRef = E476FF4727CF09B5002466CC /* ios */; };
+		E476FF4827CF09B5002466CC /*  in Resources */ = {isa = PBXBuildFile; fileRef = E476FF4727CF09B5002466CC /*  */; };
 		E4B9939E27CF2FBB00B10A8F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4B9939D27CF2FBB00B10A8F /* LaunchScreen.storyboard */; };
 		E996E6312708F4DEE0BBC682 /* libPods-WebRTC-WebRTCTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9F316BB330540275DFD5FA /* libPods-WebRTC-WebRTCTests.a */; };
 /* End PBXBuildFile section */
@@ -55,7 +55,7 @@
 		C6D6CBAF029040CD84858AA6 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		D54273204B2E4B9FAF773886 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		D60A4448BAB14299BF98AB74 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
-		E476FF4727CF09B5002466CC /* ios */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ios; sourceTree = "<group>"; };
+		E476FF4727CF09B5002466CC /*  */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ""; sourceTree = "<group>"; };
 		E4B9939D27CF2FBB00B10A8F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EC673CD4D6D94ADC8CD54C02 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -161,7 +161,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				E476FF4727CF09B5002466CC /* ios */,
+				E476FF4727CF09B5002466CC /*  */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -287,7 +287,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				E4B9939E27CF2FBB00B10A8F /* LaunchScreen.storyboard in Resources */,
-				E476FF4827CF09B5002466CC /* ios in Resources */,
+				E476FF4827CF09B5002466CC /*  in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,6 +528,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3NQX9P4JTU;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = WebRTC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -539,7 +540,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.WebRTC2;
 				PRODUCT_NAME = WebRTC;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -554,6 +555,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3NQX9P4JTU;
 				INFOPLIST_FILE = WebRTC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -564,7 +566,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.WebRTC2;
 				PRODUCT_NAME = WebRTC;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

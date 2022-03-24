@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {ParamListBase} from '@react-navigation/native';
 import styled from 'styled-components/native';
@@ -11,6 +11,9 @@ import {
   MediaStreamTrack,
   mediaDevices,
   registerGlobals,
+  RTCPeerConnectionConfiguration,
+  RTCIceCandidateType,
+  RTCSessionDescriptionType,
 } from 'react-native-webrtc';
 import {View, ViewStyle} from 'react-native';
 import {
@@ -19,58 +22,99 @@ import {
   VideoOnImage,
   VideoOffImage,
 } from 'assets/images/index';
+import InCallManager from 'react-native-incall-manager';
 
 interface Props {
   navigation: StackNavigationProp<ParamListBase>;
 }
 
-const doctorVideoStyle: ViewStyle = {
-  backgroundColor: '#f2f2f2',
-  height: '100%',
-  width: '100%',
-  position: 'absolute',
+const TRUN_SERVER = 'turn:jeonhwageoleo.site:3478';
+const SOCKET_URL = 'ws://52.22.1.183:8001/ws/call/test';
+
+const configuration: RTCPeerConnectionConfiguration = {
+  iceServers: [
+    {
+      urls: [TRUN_SERVER],
+      username: 'jiyeon',
+      credential: 'test4841',
+    },
+  ],
 };
 
-const patientVideoStyle: ViewStyle = {
-  backgroundColor: '#f2f2f2',
-  height: '100%',
-  width: '100%',
-  borderRadius: 8,
-};
-
-const VideoChat = ({}: Props) => {
+const VideoChat = ({navigation}: Props) => {
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const [isFrontVideo, setIsFrontVideo] = useState(true);
   const [isVideo, setIsVideo] = useState(true);
 
-  const initVideo = async () => {
-    const configuration = {
-      iceServers: [
-        {
-          urls: 'turn:jeonhwageoleo.site:3478',
-          username: 'jiyeon',
-          credential: 'test4841',
-        },
-      ],
-      iceCandidatePoolSize: 10,
+  const ws = useRef(new WebSocket(SOCKET_URL));
+
+  const localPC = useRef(new RTCPeerConnection(configuration));
+
+  useEffect(() => {
+    ws.current.onopen = () => {
+      console.log('signaling server start');
     };
 
-    const localPC = new RTCPeerConnection(configuration);
-    const remotePC = new RTCPeerConnection(configuration);
-
-    // const medias = await mediaDevices.enumerateDevices();
-
-    const socket = new WebSocket('ws://192.168.0.176:8001/ws/call/test');
-
-    socket.onopen = () => {
-      console.log('open server');
+    ws.current.onmessage = message => {
+      const data = JSON.parse(message.data);
+      console.log(`🔴 message data ${data.type}`);
+      console.log(data);
+      switch (data.type) {
+        case 'call_received':
+          //handleOffer(data.data.offer);
+          break;
+        case 'call_answered':
+          handleAnswer(data.data);
+          break;
+        case 'ICEcandidate':
+          localPC.current.addIceCandidate(data.data);
+          break;
+        default:
+          break;
+      }
     };
-    socket.onmessage = (message: any) => {
-      console.log('message1');
-      console.log(message);
+    ws.current.onerror = function (err) {
+      console.log('Get error', err);
     };
 
+    ws.current.onclose = () => {
+      console.log('closed server');
+    };
+    initLocalVideo();
+    registerPeer();
+    setTimeout(() => {
+      sendCall();
+    }, 8000);
+
+    InCallManager.start({media: 'audio', auto: true, ringback: ''});
+    InCallManager.setKeepScreenOn(true);
+    InCallManager.setForceSpeakerphoneOn(true);
+    // return () => {
+    //   InCallManager.stop({busytone: ''});
+    // };
+  }, [isFrontVideo, isVideo]);
+
+  const registerPeer = () => {
+    localPC.current.onaddstream = event => {
+      console.log('⭕️ addStream');
+      console.log(event);
+      console.log(localStream);
+      console.log(remoteStream);
+      setRemoteStream(event.stream);
+    };
+
+    localPC.current.onicecandidate = event => {
+      if (event.candidate) {
+        send({
+          type: 'ICEcandidate',
+          data: event.candidate,
+        });
+      }
+    };
+  };
+
+  const initLocalVideo = () => {
     mediaDevices
       .getUserMedia({
         audio: true,
@@ -80,67 +124,46 @@ const VideoChat = ({}: Props) => {
       })
       .then(stream => {
         setLocalStream(stream);
-        localPC.addStream(stream);
+        localPC.current.addStream(stream);
       })
       .catch(error => {
-        console.log(error);
+        console.log('initLocalVideo error', error);
       });
+  };
 
-    // 네트워크 정보 교환하기
-    localPC.onicecandidate = e => {
-      try {
-        if (e.candidate) {
-          socket.send(
-            JSON.stringify({
-              type: 'ICEcandidate',
-              data: {
-                message: e.candidate,
-              },
-            }),
-          );
-          socket.onmessage = async message => {
-            const data = JSON.parse(message.data);
-            if (data.type === 'ICEcandidate') {
-              await localPC.addIceCandidate(data.message.candidate);
-            }
-          };
-        }
-      } catch (err) {
-        console.error(`Error adding remotePC iceCandidate: ${err}`);
-      }
-    };
+  const send = (message: Object) => {
+    ws.current.send(JSON.stringify(message));
+  };
+
+  const sendCall = async () => {
+    const offer = await localPC.current.createOffer();
+    localPC.current.setLocalDescription(offer);
+    console.log('offer보내기');
+    send({
+      type: 'offer',
+      offer: offer,
+    });
+  };
+
+  const handleOffer = async (offer: RTCSessionDescriptionType) => {
     try {
-      //Offer SDP(Session Description Protocol) 생성 브라우저에서 사용하능한 코덱이나 해상도에 대한 정보
-      const offer = await localPC.createOffer();
-      console.log('Offer from localPC, setLocalDescription');
+      localPC.current.setRemoteDescription(new RTCSessionDescription(offer));
 
-      console.log(offer);
-      console.log('offer');
-      await localPC.setLocalDescription(offer);
-
-      // console.log('remotePC, setRemoteDescription');
-      // await remotePC.setRemoteDescription(localPC.localDescription);
-      // 현재 remote는 상대 session에 대한 정보를 알고 있고
-      // console.log('RemotePC, createAnswer');
-      //Answer SDP 를 생성하여 Signaling Channel 을 통해 local에게 전달
-      // const answer = await remotePC.createAnswer();
-      // console.log(`Answer from remotePC: ${answer.sdp}`);
-      // console.log('remotePC, setLocalDescription');
-      // await remotePC.setLocalDescription(answer);
-      // console.log('localPC, setRemoteDescription');
-      // await localPC.setRemoteDescription(remotePC.localDescription);
-
-      socket.onclose = () => {
-        console.log('closed server');
-      };
-    } catch (err) {
-      console.error(err);
+      // const answer = await localPC.current.createAnswer();
+      // localPC.current.setLocalDescription(answer);
+    } catch (error) {
+      console.log(`❌ handleoffer error, ${error}`);
     }
   };
 
-  useEffect(() => {
-    initVideo();
-  }, [isFrontVideo, isVideo]);
+  const handleAnswer = (answer: RTCSessionDescription) => {
+    try {
+      console.log('handleAnswer');
+      localPC.current.setRemoteDescription(new RTCSessionDescription(answer));
+    } catch (error) {
+      console.log(`❌ handleAnswer error, ${error}`);
+    }
+  };
 
   return (
     <VideoChatView>
@@ -150,7 +173,7 @@ const VideoChat = ({}: Props) => {
         objectFit="cover"
       />
       <ExitView>
-        <ExitButton>
+        <ExitButton onPress={sendCall}>
           <ExitText>나가기</ExitText>
         </ExitButton>
       </ExitView>
@@ -209,6 +232,20 @@ const ExitView = styled.View`
   align-items: flex-end;
   padding-right: 10px;
 `;
+
+const doctorVideoStyle: ViewStyle = {
+  backgroundColor: '#f2f2f2',
+  height: '100%',
+  width: '100%',
+  position: 'absolute',
+};
+
+const patientVideoStyle: ViewStyle = {
+  backgroundColor: '#f2f2f2',
+  height: '100%',
+  width: '100%',
+  borderRadius: 8,
+};
 
 const ExitButton = styled.TouchableOpacity`
   width: 76px;

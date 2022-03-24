@@ -13,6 +13,8 @@ target 'WebRTC' do
 
 
 
+  pod 'ReactNativeIncallManager', :path => '../node_modules/react-native-incall-manager'
+
   target 'WebRTCTests' do
     inherit! :complete
     # Pods for testing
