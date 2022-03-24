@@ -19,6 +19,7 @@ import {View, ViewStyle} from 'react-native';
 import {
   CameraImage,
   AudioOnImage,
+  AudioOffImage,
   VideoOnImage,
   VideoOffImage,
 } from 'assets/images/index';
@@ -46,6 +47,7 @@ const VideoChat = ({navigation}: Props) => {
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const [isFrontVideo, setIsFrontVideo] = useState(true);
   const [isVideo, setIsVideo] = useState(true);
+  const [isAudio, setIsAudio] = useState(true);
 
   const ws = useRef(new WebSocket(SOCKET_URL));
 
@@ -117,7 +119,7 @@ const VideoChat = ({navigation}: Props) => {
   const initLocalVideo = () => {
     mediaDevices
       .getUserMedia({
-        audio: true,
+        audio: isAudio,
         video: isVideo
           ? {facingMode: isFrontVideo ? 'user' : 'environment'}
           : false,
@@ -203,8 +205,15 @@ const VideoChat = ({navigation}: Props) => {
           }}>
           <TouchImage source={CameraImage} resizeMode="contain" />
         </TouchButton>
-        <TouchButton activeOpacity={0.9}>
-          <TouchImage source={AudioOnImage} resizeMode="contain" />
+        <TouchButton
+          activeOpacity={0.9}
+          onPress={() => {
+            setIsAudio(prev => !prev);
+          }}>
+          <TouchImage
+            source={isAudio ? AudioOnImage : AudioOffImage}
+            resizeMode="contain"
+          />
         </TouchButton>
         <TouchButton
           activeOpacity={0.9}

@@ -11,10 +11,13 @@ target 'WebRTC' do
     :hermes_enabled => false
   )
 
+<<<<<<< HEAD
 
 
   pod 'ReactNativeIncallManager', :path => '../node_modules/react-native-incall-manager'
 
+=======
+>>>>>>> adec72b02211278a82ea9e321c4303671b69784a
   target 'WebRTCTests' do
     inherit! :complete
     # Pods for testing
