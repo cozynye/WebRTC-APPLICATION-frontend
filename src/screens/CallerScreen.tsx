@@ -55,13 +55,13 @@ const VideoChat = ({navigation}: Props) => {
 
   useEffect(() => {
     ws.current.onopen = () => {
-      console.log('signaling server start');
+      //console.log('signaling server start');
     };
 
     ws.current.onmessage = message => {
       const data = JSON.parse(message.data);
-      console.log(`🔴 message data ${data.type}`);
-      console.log(data);
+      //console.log(`🔴 message data ${data.type}`);
+      //console.log(data);
       switch (data.type) {
         case 'call_received':
           //handleOffer(data.data.offer);
@@ -77,11 +77,11 @@ const VideoChat = ({navigation}: Props) => {
       }
     };
     ws.current.onerror = function (err) {
-      console.log('Get error', err);
+      //console.log('Get error', err);
     };
 
     ws.current.onclose = () => {
-      console.log('closed server');
+      //console.log('closed server');
     };
     initLocalVideo();
     registerPeer();
@@ -99,10 +99,10 @@ const VideoChat = ({navigation}: Props) => {
 
   const registerPeer = () => {
     localPC.current.onaddstream = event => {
-      console.log('⭕️ addStream');
-      console.log(event);
-      console.log(localStream);
-      console.log(remoteStream);
+      //console.log('⭕️ addStream');
+      //console.log(event);
+      //console.log(localStream);
+      //console.log(remoteStream);
       setRemoteStream(event.stream);
     };
 
@@ -140,7 +140,7 @@ const VideoChat = ({navigation}: Props) => {
   const sendCall = async () => {
     const offer = await localPC.current.createOffer();
     localPC.current.setLocalDescription(offer);
-    console.log('offer보내기');
+    //console.log('offer보내기');
     send({
       type: 'offer',
       offer: offer,
@@ -160,7 +160,7 @@ const VideoChat = ({navigation}: Props) => {
 
   const handleAnswer = (answer: RTCSessionDescription) => {
     try {
-      console.log('handleAnswer');
+      //console.log('handleAnswer');
       localPC.current.setRemoteDescription(new RTCSessionDescription(answer));
     } catch (error) {
       console.log(`❌ handleAnswer error, ${error}`);
